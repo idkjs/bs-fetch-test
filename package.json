@@ -4,6 +4,7 @@
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w",
+    "test": "node -r isomorphic-fetch src/demo.bs.js",
     "clean": "bsb -clean-world"
   },
   "keywords": [
@@ -12,8 +13,12 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "bs-fetch": "^0.2.0",
-    "bs-json": "^0.2.4",
-    "bs-platform": "^2.1.0"
+    "@glennsl/bs-json": "^5.0.4",
+    "bs-fetch": "^0.6.2",
+    "bs-platform": "^9.0.2"
+  },
+  "dependencies": {
+    "isomorphic-fetch": "^3.0.0",
+    "micro": "^9.3.4"
   }
 }

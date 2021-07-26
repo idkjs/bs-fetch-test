@@ -1,40 +1,45 @@
-let baseUrl = "https://localhost:8000";
+
+[%%raw "require('isomorphic-fetch')"];
 
 type prices = {
   nasdaq: int,
-  cac40: int
+  cac40: int,
 };
 
 type stockItem = {
   timestamp: int,
   index: int,
-  stocks: prices
+  stocks: prices,
 };
 
 module Decode = {
-  let prices = (json) => {
+  let prices = json => {
     open! Json.Decode;
-    {nasdaq: json |> field("nasdaq", int), cac40: json |> field("cac40", int)}
+    {
+      nasdaq: json |> field("nasdaq", int),
+      cac40: json |> field("cac40", int),
+    };
   };
-  let stockItem = (json) =>
+  let stockItem = json =>
     Json.Decode.{
       timestamp: json |> field("timestamp", int),
       index: json |> field("index", int),
-      stocks: json |> field("stocks", prices)
+      stocks: json |> field("stocks", prices),
     };
 };
 
 let fetchdata =
-  Js.Promise.(
-    Bs_fetch.fetch("http://localhost:8000")
-    |> then_(Bs_fetch.Response.text)
-    |> then_((jsonText) => resolve(Js.Json.parseExn(jsonText)))
+  Js.Promise.
+    (
+      Fetch.fetch("http://localhost:8000")
+      |> then_(Fetch.Response.text)
+      |> then_(jsonText => resolve(Js.Json.parseExn(jsonText)))
+    );
     /* |> Decode.stockItem */
     /* |> Js.log */
-  );
 
-/* fetchdata |> Decode.stockItem |> Js.log; */
-fetchdata |> Js.log;
+fetchdata |> Decode.stockItem|>Js.Promise.resolve |> Js.log(_);
+// fetchdata |> Js.log;
 /* [
     {
         "timestamp": 1513638108486,
@@ -63,13 +68,13 @@ fetchdata |> Js.log;
    /* create function to get the items field off the json response */
    let parseStocksJson = (json) => Json.Decode.array(parseStockItem); */
 /* let fetchJoke = (_name) =>
-   Bs_fetch.fetch(chuckApi)
-   |> Js.Promise.then_(Bs_fetch.Response.json)
+   Fetch.fetch(chuckApi)
+   |> Js.Promise.then_(Fetch.Response.json)
    |> Js.Promise.then_((json) => Js.Promise.resolve(Js.log(parseChuckJokeJson(json)))); */
 /* let data =
      Js.Promise.(
-       Bs_fetch.fetch("https://localhost:8000")
-       |> Js.Promise.then_(Bs_fetch.Response.json)
+       Fetch.fetch("https://localhost:8000")
+       |> Js.Promise.then_(Fetch.Response.json)
        |> Js.Promise.then_((json) => Js.Promise.resolve(Js.log(parseStocksJson(json))))
      );
 

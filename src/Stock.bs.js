@@ -3,9 +3,6 @@
 
 var Json_decode = require("@glennsl/bs-json/src/Json_decode.bs.js");
 
-require('isomorphic-fetch')
-;
-
 function prices(json) {
   return {
           nasdaq: Json_decode.field("nasdaq", Json_decode.$$int, json),
@@ -26,14 +23,5 @@ var Decode = {
   stockItem: stockItem
 };
 
-var fetchdata = fetch("http://localhost:8000").then(function (prim) {
-        return prim.text();
-      }).then(function (jsonText) {
-      return Promise.resolve(JSON.parse(jsonText));
-    });
-
-console.log(fetchdata);
-
 exports.Decode = Decode;
-exports.fetchdata = fetchdata;
-/*  Not a pure module */
+/* No side effect */
